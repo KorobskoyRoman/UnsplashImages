@@ -6,15 +6,21 @@
 //
 
 import UIKit
+import SDWebImage
 
 class PhotoViewController: UIViewController {
+        
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, Result>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Result>
 
-    var photos = [ImageModel]()
-    var collectionView: UICollectionView!
+    private var collectionView: UICollectionView!
     private var timer: Timer?
     private let networkManager = NetworkManager()
-    private var images: ImageModel?
+    private var images = [Result]()
+    private var searchResults: ImageData?
     private let searchController = UISearchController(searchResultsController: nil)
+    
+    private lazy var dataSource = createDiffableDataSource()
     
     enum Section: Int, CaseIterable {
         case mainSection
@@ -22,12 +28,10 @@ class PhotoViewController: UIViewController {
         func description() -> String {
             switch self {
             case .mainSection:
-                return "Main"
+                return "Total results: "
             }
         }
     }
-    
-    var dataSource: UICollectionViewDiffableDataSource<Section, ImageModel>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +40,7 @@ class PhotoViewController: UIViewController {
         searchBar(searchController.searchBar, textDidChange: "popular")
         setupSearchBar()
         setupCollectionView()
-        reloadData()
+        applySnapshot(animatingDifferences: false)
     }
     
     private func setupSearchBar() {
@@ -58,14 +62,7 @@ class PhotoViewController: UIViewController {
         collectionView.backgroundColor = .mainWhite()
         
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseId)
-    }
-    
-    private func reloadData() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, ImageModel>()
-        
-        snapshot.appendSections([.mainSection])
-        snapshot.appendItems(photos, toSection: .mainSection)
-        dataSource?.apply(snapshot, animatingDifferences: true)
+        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
     }
 }
 
@@ -87,17 +84,20 @@ extension PhotoViewController {
     }
     
     private func createMainSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .absolute(78))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 0, trailing: 5)
         
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .fractionalWidth(0.5))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+                
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 8
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
+    
+        section.interGroupSpacing = 5
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
         
         let sectionHeader = createHeader()
         section.boundarySupplementaryItems = [sectionHeader]
@@ -113,36 +113,69 @@ extension PhotoViewController {
 }
 
 extension PhotoViewController {
-//    private func createDataSource() {
-//        dataSource = UICollectionViewDiffableDataSource<Section, ImageModel>(collectionView: collectionView, cellProvider: { collectionView, indexPath, photo in
-//            guard let section = Section(rawValue: indexPath.section) else {
-//                fatalError("No section")
-//            }
-//            switch section {
-//            case .mainSection:
-//                return self.configure(collectionView: collectionView, cellType: PhotoCell.self, with: photo, for: indexPath)
-//            }
-//        })
-//
-//        dataSource?.supplementaryViewProvider = { collectionView, kind, indexPath in
-//            guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else { fatalError("can't create new section header")}
-//            guard let section = Section(rawValue: indexPath.section) else { fatalError("No section kind") }
-//            sectionHeader.configurate(text: section.description(), font: .laoSangamMN20(), textColor: #colorLiteral(red: 0.6321875453, green: 0.636367023, blue: 0.6536904573, alpha: 1))
-//
-//            return sectionHeader
-//        }
-//    }
+    
+    private func createDiffableDataSource() -> DataSource {
+        let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, image in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseId, for: indexPath) as! PhotoCell
+            cell.photo = image
+            return cell
+        }
+        
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+            guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else { fatalError("can't create new section header")}
+            guard let section = Section(rawValue: indexPath.section) else { fatalError("No section kind") }
+            sectionHeader.configurate(text: section.description(), font: UIFont(name: "Al Bayan Bold", size: 16), textColor: #colorLiteral(red: 0.6321875453, green: 0.636367023, blue: 0.6536904573, alpha: 1))
+            
+            return sectionHeader
+        }
+        
+        return dataSource
+    }
+    
+    private func applySnapshot(animatingDifferences: Bool = true) {
+        var snapshot = Snapshot()
+        
+        snapshot.appendSections([.mainSection])
+        snapshot.appendItems(images, toSection: .mainSection)
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+    }
 }
 
 // MARK: - UISearchBarDelegate
 
 extension PhotoViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.networkManager.fetchPhotos(searchText: searchText) { [weak self] searchResults in
-            self?.images = searchResults
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
+        self.timer?.invalidate()
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
+            self.networkManager.fetchPhotos(searchText: searchText) { [weak self] searchResults in
+                self?.images = searchResults.results
+                DispatchQueue.main.async {
+                    self?.applySnapshot()
+                }
             }
+        })
+    }
+}
+
+// MARK: - SwiftUI
+
+import SwiftUI
+
+struct ChatCellControllerProvider: PreviewProvider {
+    static var previews: some View {
+        ContainerView().edgesIgnoringSafeArea(.all).previewInterfaceOrientation(.portrait)
+    }
+    
+    struct ContainerView: UIViewControllerRepresentable {
+
+        let tabbarVC = MainTabBarController()
+        
+        func makeUIViewController(context: Context) -> MainTabBarController {
+            return tabbarVC
+        }
+        
+        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+            
         }
     }
 }

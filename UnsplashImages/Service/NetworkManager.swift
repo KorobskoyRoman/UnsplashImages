@@ -11,7 +11,7 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     
-    func fetchPhotos(searchText: String, completion: @escaping (ImageModel) -> Void) {
+    func fetchPhotos(searchText: String, completion: @escaping (ImageData) -> Void) {
         let apiKey = "Tb2OdOBrRDkyMDye7PNozlFWSkXrCh_3DWmrU40EI2E"
         let urlString = "https://api.unsplash.com/search/photos/?page=1&per_page=10&client_id=\(apiKey)&query=\(searchText)"
         
@@ -24,7 +24,7 @@ class NetworkManager {
             guard let data = data else {
                 return
             }
-            if let imageModel = self.parseJSON(withData: data) {
+            if let imageModel = self.parseJSON(type: ImageData.self, data: data) {
                 print("data from parsing: \(imageModel)")
                 completion(imageModel)
             }
@@ -32,16 +32,18 @@ class NetworkManager {
         task.resume()
     }
     
-    func parseJSON(withData data: Data) -> ImageModel? {
+    func parseJSON<T: Decodable>(type: T.Type, data: Data?) -> T? {
         let decoder = JSONDecoder()
-        do {
-            let imageData = try decoder.decode(ImageData.self, from: data)
-            guard let imageModel = ImageModel(imageData: imageData) else { return nil }
-            print("данные из парсинга: \(imageData)")
-            return imageModel
-        } catch let error {
-            print("error: \(error)")
+        guard let data = data else {
+            return nil
         }
-        return nil
+        do {
+            let imageData = try decoder.decode(T.self, from: data)
+            print("parsing json data: \(imageData)")
+            return imageData
+        } catch let jsonError {
+            print("error: \(jsonError)")
+            return nil
+        }
     }
 }
