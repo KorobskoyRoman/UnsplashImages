@@ -8,7 +8,6 @@
 import Foundation
 
 struct ImageData: Codable {
-    let total: Int
     let results: [Result]
 }
 

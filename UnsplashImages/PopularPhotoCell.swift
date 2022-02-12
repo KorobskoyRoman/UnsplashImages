@@ -1,30 +1,30 @@
 //
-//  PhotoCell.swift
+//  PopularPhotoCell.swift
 //  UnsplashImages
 //
-//  Created by Roman Korobskoy on 07.02.2022.
+//  Created by Roman Korobskoy on 12.02.2022.
 //
 
 import UIKit
 import SDWebImage
 
-class PhotoCell: UICollectionViewCell {
+class PopularPhotoCell: UICollectionViewCell {
     
-    static var reuseId = "reuseId"
-    let imagePhoto = UIImageView()
+    static var reuseId = "PopularPhotoCell"
+    let imageView = UIImageView()
     let containterView = UIView()
     
     var photo: Result! {
         didSet {
             let imageUrl = photo.urls["regular"]
             guard let photoUrl = imageUrl, let url = URL(string: photoUrl) else { return }
-            imagePhoto.sd_setImage(with: url, completed: nil)
+            imageView.sd_setImage(with: url, completed: nil)
         }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        imagePhoto.image = nil
+        imageView.image = nil
     }
     
     override func layoutSubviews() { //округляем всю ячейку
@@ -48,16 +48,16 @@ class PhotoCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     private func setConstraints() {
         containterView.translatesAutoresizingMaskIntoConstraints = false
-        imagePhoto.translatesAutoresizingMaskIntoConstraints = false
-        imagePhoto.backgroundColor = .systemRed
-        imagePhoto.clipsToBounds = true
-        imagePhoto.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.backgroundColor = .systemRed
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         
         addSubview(containterView)
-        containterView.addSubview(imagePhoto)
+        containterView.addSubview(imageView)
         
         NSLayoutConstraint.activate([
             containterView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -67,10 +67,10 @@ class PhotoCell: UICollectionViewCell {
         ])
         
         NSLayoutConstraint.activate([
-            imagePhoto.topAnchor.constraint(equalTo: containterView.topAnchor),
-            imagePhoto.leadingAnchor.constraint(equalTo: containterView.leadingAnchor),
-            imagePhoto.trailingAnchor.constraint(equalTo: containterView.trailingAnchor),
-            imagePhoto.bottomAnchor.constraint(equalTo: containterView.bottomAnchor)
+            imageView.topAnchor.constraint(equalTo: containterView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: containterView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: containterView.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: containterView.bottomAnchor)
         ])
     }
 }

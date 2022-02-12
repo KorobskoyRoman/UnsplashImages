@@ -17,18 +17,20 @@ class PhotoViewController: UIViewController {
     private var timer: Timer?
     private let networkManager = NetworkManager()
     private var images = [Result]()
-    private var searchResults: ImageData?
+    private var popularImages = [Result]()
     private let searchController = UISearchController(searchResultsController: nil)
     
     private lazy var dataSource = createDiffableDataSource()
     
     enum Section: Int, CaseIterable {
-        case mainSection
+        case popular, mainSection
         
         func description() -> String {
             switch self {
             case .mainSection:
-                return "Total results: "
+                return "Search results"
+            case .popular:
+                return "Popular photos"
             }
         }
     }
@@ -41,6 +43,13 @@ class PhotoViewController: UIViewController {
         setupSearchBar()
         setupCollectionView()
         applySnapshot(animatingDifferences: false)
+        
+        self.networkManager.fetchPopular(completion: { searchResults in
+            self.popularImages = searchResults
+            DispatchQueue.main.async {
+                self.applySnapshot()
+            }
+        })
     }
     
     private func setupSearchBar() {
@@ -62,6 +71,7 @@ class PhotoViewController: UIViewController {
         collectionView.backgroundColor = .mainWhite()
         
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseId)
+        collectionView.register(PopularPhotoCell.self, forCellWithReuseIdentifier: PopularPhotoCell.reuseId)
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
     }
 }
@@ -75,6 +85,8 @@ extension PhotoViewController {
             switch section {
             case .mainSection:
                 return self.createMainSection()
+            case .popular:
+                return self.createPopularSection()
             }
         }
         let config = UICollectionViewCompositionalLayoutConfiguration()
@@ -104,6 +116,25 @@ extension PhotoViewController {
         return section
     }
     
+    private func createPopularSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(88), heightDimension: .absolute(88))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 5
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
+        section.orthogonalScrollingBehavior = .continuous
+        
+        let sectionHeader = createHeader()
+        section.boundarySupplementaryItems = [sectionHeader]
+        return section
+    }
+    
     private func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let sectionHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: sectionHeaderSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
@@ -116,9 +147,19 @@ extension PhotoViewController {
     
     private func createDiffableDataSource() -> DataSource {
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, image in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseId, for: indexPath) as! PhotoCell
-            cell.photo = image
-            return cell
+            guard let section = Section(rawValue: indexPath.section) else {
+                fatalError("No section")
+            }
+            switch section {
+            case .popular:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PopularPhotoCell.reuseId, for: indexPath) as! PopularPhotoCell
+                cell.photo = image
+                return cell
+            case .mainSection:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseId, for: indexPath) as! PhotoCell
+                cell.photo = image
+                return cell
+            }
         }
         
         dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
@@ -135,8 +176,9 @@ extension PhotoViewController {
     private func applySnapshot(animatingDifferences: Bool = true) {
         var snapshot = Snapshot()
         
-        snapshot.appendSections([.mainSection])
+        snapshot.appendSections([.popular, .mainSection])
         snapshot.appendItems(images, toSection: .mainSection)
+        snapshot.appendItems(popularImages, toSection: .popular)
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 }

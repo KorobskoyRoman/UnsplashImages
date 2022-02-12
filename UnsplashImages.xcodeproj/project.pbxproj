@@ -19,6 +19,7 @@
 		9C9EB9C627B1D40A00D4F8F3 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB9C527B1D40A00D4F8F3 /* NetworkManager.swift */; };
 		9C9EB9C827B1D60600D4F8F3 /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB9C727B1D60600D4F8F3 /* ImageData.swift */; };
 		9C9EB9CB27B56FC100D4F8F3 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB9CA27B56FC100D4F8F3 /* SectionHeader.swift */; };
+		9CED5E6327B835AA007A61E5 /* PopularPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E6227B835AA007A61E5 /* PopularPhotoCell.swift */; };
 		B2E2780E933A3F6E2EC70039 /* Pods_UnsplashImages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 263E2D02FC720BC07D644BEC /* Pods_UnsplashImages.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		9C9EB9C527B1D40A00D4F8F3 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		9C9EB9C727B1D60600D4F8F3 /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		9C9EB9CA27B56FC100D4F8F3 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
+		9CED5E6227B835AA007A61E5 /* PopularPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularPhotoCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 				9C9EB9B727B190F000D4F8F3 /* PhotoViewController.swift */,
 				9C9EB9B927B1930700D4F8F3 /* LibraryViewController.swift */,
 				9C9EB9C127B19B0500D4F8F3 /* PhotoCell.swift */,
+				9CED5E6227B835AA007A61E5 /* PopularPhotoCell.swift */,
 				9C9EB9C927B5554200D4F8F3 /* Service */,
 				9C9EB9BC27B195BB00D4F8F3 /* Models */,
 				9C9EB9BB27B193D400D4F8F3 /* Extensions */,
@@ -253,6 +256,7 @@
 				9C9EB9BA27B1930700D4F8F3 /* LibraryViewController.swift in Sources */,
 				9C9EB9C227B19B0500D4F8F3 /* PhotoCell.swift in Sources */,
 				9C9EB9C827B1D60600D4F8F3 /* ImageData.swift in Sources */,
+				9CED5E6327B835AA007A61E5 /* PopularPhotoCell.swift in Sources */,
 				9C9EB9B827B190F000D4F8F3 /* PhotoViewController.swift in Sources */,
 				9C9EB9CB27B56FC100D4F8F3 /* SectionHeader.swift in Sources */,
 				9C9EB9A427B18F6A00D4F8F3 /* SceneDelegate.swift in Sources */,
