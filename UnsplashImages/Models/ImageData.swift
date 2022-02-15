@@ -7,15 +7,19 @@
 
 import Foundation
 
-struct ImageData: Codable {
+class ImageData: Codable {
+    static func == (lhs: ImageData, rhs: ImageData) -> Bool {
+        lhs.results == rhs.results
+    }
+    
     let results: [Result]
 }
 
-struct Result: Codable, Hashable {
+class Result: NSObject, Codable {
     
     let urls: [Urls.RawValue:String]
     
-    enum Urls: String {
+    enum Urls: String, Hashable {
         case raw
         case full
         case regular
@@ -24,6 +28,10 @@ struct Result: Codable, Hashable {
     }
     
     static func == (lhs: Result, rhs: Result) -> Bool {
-        lhs.urls == rhs.urls
+        return lhs.urls == rhs.urls
     }
+    
+//    override var hash: Int {
+//        hasher.combine(urls)
+//    }
 }

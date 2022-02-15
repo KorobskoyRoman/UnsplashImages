@@ -85,18 +85,11 @@
 		9C9EB9A027B18F6A00D4F8F3 /* UnsplashImages */ = {
 			isa = PBXGroup;
 			children = (
-				9C9EB9A127B18F6A00D4F8F3 /* AppDelegate.swift */,
-				9C9EB9A327B18F6A00D4F8F3 /* SceneDelegate.swift */,
-				9C9EB9B527B1909000D4F8F3 /* MainTabBarController.swift */,
-				9C9EB9B727B190F000D4F8F3 /* PhotoViewController.swift */,
-				9C9EB9B927B1930700D4F8F3 /* LibraryViewController.swift */,
-				9C9EB9C127B19B0500D4F8F3 /* PhotoCell.swift */,
-				9CED5E6227B835AA007A61E5 /* PopularPhotoCell.swift */,
+				9CED5E6C27BC1A71007A61E5 /* Support files */,
+				9CED5E6B27BC1A4D007A61E5 /* Controllers */,
 				9C9EB9C927B5554200D4F8F3 /* Service */,
 				9C9EB9BC27B195BB00D4F8F3 /* Models */,
 				9C9EB9BB27B193D400D4F8F3 /* Extensions */,
-				9C9EB9AA27B18F6C00D4F8F3 /* Assets.xcassets */,
-				9C9EB9AC27B18F6C00D4F8F3 /* LaunchScreen.storyboard */,
 				9C9EB9AF27B18F6C00D4F8F3 /* Info.plist */,
 			);
 			path = UnsplashImages;
@@ -125,6 +118,37 @@
 				9C9EB9C527B1D40A00D4F8F3 /* NetworkManager.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		9CED5E6A27BC1A41007A61E5 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				9C9EB9C127B19B0500D4F8F3 /* PhotoCell.swift */,
+				9CED5E6227B835AA007A61E5 /* PopularPhotoCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		9CED5E6B27BC1A4D007A61E5 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9CED5E6A27BC1A41007A61E5 /* Cells */,
+				9C9EB9B527B1909000D4F8F3 /* MainTabBarController.swift */,
+				9C9EB9B727B190F000D4F8F3 /* PhotoViewController.swift */,
+				9C9EB9B927B1930700D4F8F3 /* LibraryViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		9CED5E6C27BC1A71007A61E5 /* Support files */ = {
+			isa = PBXGroup;
+			children = (
+				9C9EB9A127B18F6A00D4F8F3 /* AppDelegate.swift */,
+				9C9EB9A327B18F6A00D4F8F3 /* SceneDelegate.swift */,
+				9C9EB9AA27B18F6C00D4F8F3 /* Assets.xcassets */,
+				9C9EB9AC27B18F6C00D4F8F3 /* LaunchScreen.storyboard */,
+			);
+			path = "Support files";
 			sourceTree = "<group>";
 		};
 		E45B8AC179CEF401A6C072CD /* Pods */ = {

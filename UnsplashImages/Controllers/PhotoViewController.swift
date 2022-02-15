@@ -19,6 +19,8 @@ class PhotoViewController: UIViewController {
     private var images = [Result]()
     private var popularImages = [Result]()
     private let searchController = UISearchController(searchResultsController: nil)
+    private var isLiked: Bool = false
+    private var savedPhotos = [UIImage]()
     
     private lazy var dataSource = createDiffableDataSource()
     
@@ -52,6 +54,8 @@ class PhotoViewController: UIViewController {
         })
     }
     
+// MARK: - Setup elements
+    
     private func setupSearchBar() {
         navigationController?.navigationBar.barTintColor = .mainWhite()
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -75,6 +79,8 @@ class PhotoViewController: UIViewController {
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
     }
 }
+
+// MARK: - Create layout
 
 extension PhotoViewController {
     private func createCompositialLayout() ->  UICollectionViewLayout {
@@ -126,8 +132,8 @@ extension PhotoViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 5
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
+        section.interGroupSpacing = 10
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 10)
         section.orthogonalScrollingBehavior = .continuous
         
         let sectionHeader = createHeader()
@@ -142,6 +148,8 @@ extension PhotoViewController {
         return sectionHeader
     }
 }
+
+// MARK: - Create data source
 
 extension PhotoViewController {
     

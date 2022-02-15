@@ -14,6 +14,15 @@ class PhotoCell: UICollectionViewCell {
     let imagePhoto = UIImageView()
     let containterView = UIView()
     
+    var likeButton: UIButton = {
+        let button = UIButton(type: .system)
+        let image = UIImage(systemName: "heart.fill")
+        button.setImage(image, for: .normal)
+        button.tintColor = .apRed()
+        return button
+    }()
+    private var isLiked: Bool = false
+    
     var photo: Result! {
         didSet {
             let imageUrl = photo.urls["regular"]
@@ -29,8 +38,10 @@ class PhotoCell: UICollectionViewCell {
     
     override func layoutSubviews() { //округляем всю ячейку
         super.layoutSubviews()
-        self.containterView.layer.cornerRadius = 4
+        self.containterView.layer.cornerRadius = 10
+        self.layer.cornerRadius = 10
         self.containterView.clipsToBounds = true
+        self.imagePhoto.clipsToBounds = true
     }
     
     override init(frame: CGRect) {
@@ -38,6 +49,7 @@ class PhotoCell: UICollectionViewCell {
         
         backgroundColor = .white
         setConstraints()
+        likeButton.addTarget(self, action: #selector(likeButtonPressed(_:)), for: .touchUpInside)
         
         self.layer.shadowColor = UIColor.mainBlack().cgColor
         self.layer.shadowRadius = 3
@@ -49,15 +61,25 @@ class PhotoCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    @objc private func likeButtonPressed(_ sender: UIButton!) {
+        let defaults = UserDefaults.standard
+        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: Result.self, requiringSecureCoding: false) {
+            print("success")
+            defaults.set(savedData, forKey: "photos")
+        }
+    }
+
     private func setConstraints() {
         containterView.translatesAutoresizingMaskIntoConstraints = false
         imagePhoto.translatesAutoresizingMaskIntoConstraints = false
         imagePhoto.backgroundColor = .systemRed
         imagePhoto.clipsToBounds = true
         imagePhoto.contentMode = .scaleAspectFill
+        likeButton.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(containterView)
         containterView.addSubview(imagePhoto)
+        self.addSubview(likeButton)
         
         NSLayoutConstraint.activate([
             containterView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -72,5 +94,12 @@ class PhotoCell: UICollectionViewCell {
             imagePhoto.trailingAnchor.constraint(equalTo: containterView.trailingAnchor),
             imagePhoto.bottomAnchor.constraint(equalTo: containterView.bottomAnchor)
         ])
+        
+        NSLayoutConstraint.activate([
+            likeButton.topAnchor.constraint(equalTo: imagePhoto.topAnchor),
+            likeButton.trailingAnchor.constraint(equalTo: imagePhoto.trailingAnchor),
+            likeButton.widthAnchor.constraint(equalToConstant: 50),
+            likeButton.heightAnchor.constraint(equalToConstant: 50)
+            ])
     }
 }

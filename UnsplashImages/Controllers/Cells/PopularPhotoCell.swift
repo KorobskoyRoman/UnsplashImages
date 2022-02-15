@@ -16,7 +16,7 @@ class PopularPhotoCell: UICollectionViewCell {
     
     var photo: Result! {
         didSet {
-            let imageUrl = photo.urls["regular"]
+            let imageUrl = photo.urls["small"]
             guard let photoUrl = imageUrl, let url = URL(string: photoUrl) else { return }
             imageView.sd_setImage(with: url, completed: nil)
         }
@@ -31,6 +31,7 @@ class PopularPhotoCell: UICollectionViewCell {
         super.layoutSubviews()
         self.containterView.layer.cornerRadius = 4
         self.containterView.clipsToBounds = true
+        self.layer.cornerRadius = 4
     }
     
     override init(frame: CGRect) {
