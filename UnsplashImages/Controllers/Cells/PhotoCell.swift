@@ -14,12 +14,11 @@ class PhotoCell: UICollectionViewCell {
     let imagePhoto = UIImageView()
     let containterView = UIView()
     
-    var likeButton: UIButton = {
-        let button = UIButton(type: .system)
-        let image = UIImage(systemName: "heart.fill")
-        button.setImage(image, for: .normal)
-        button.tintColor = .apRed()
-        return button
+    private let checkImage: UIImageView = {
+        let image = UIImage(systemName: "checkmark.circle.fill")
+        let imageView = UIImageView(image: image)
+        imageView.alpha = 0
+        return imageView
     }()
     private var isLiked: Bool = false
     
@@ -29,6 +28,17 @@ class PhotoCell: UICollectionViewCell {
             guard let photoUrl = imageUrl, let url = URL(string: photoUrl) else { return }
             imagePhoto.sd_setImage(with: url, completed: nil)
         }
+    }
+    
+    override var isSelected: Bool {
+        didSet {
+            updateSelected()
+        }
+    }
+    
+    private func updateSelected() {
+        imagePhoto.alpha = isSelected ? 0.7 : 1
+        checkImage.alpha = isSelected ? 1 : 0
     }
     
     override func prepareForReuse() {
@@ -49,7 +59,7 @@ class PhotoCell: UICollectionViewCell {
         
         backgroundColor = .white
         setConstraints()
-        likeButton.addTarget(self, action: #selector(likeButtonPressed(_:)), for: .touchUpInside)
+        updateSelected()
         
         self.layer.shadowColor = UIColor.mainBlack().cgColor
         self.layer.shadowRadius = 3
@@ -61,25 +71,17 @@ class PhotoCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc private func likeButtonPressed(_ sender: UIButton!) {
-        let defaults = UserDefaults.standard
-        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: Result.self, requiringSecureCoding: false) {
-            print("success")
-            defaults.set(savedData, forKey: "photos")
-        }
-    }
-
     private func setConstraints() {
         containterView.translatesAutoresizingMaskIntoConstraints = false
         imagePhoto.translatesAutoresizingMaskIntoConstraints = false
         imagePhoto.backgroundColor = .systemRed
         imagePhoto.clipsToBounds = true
         imagePhoto.contentMode = .scaleAspectFill
-        likeButton.translatesAutoresizingMaskIntoConstraints = false
+        checkImage.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(containterView)
         containterView.addSubview(imagePhoto)
-        self.addSubview(likeButton)
+        self.addSubview(checkImage)
         
         NSLayoutConstraint.activate([
             containterView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -96,10 +98,10 @@ class PhotoCell: UICollectionViewCell {
         ])
         
         NSLayoutConstraint.activate([
-            likeButton.topAnchor.constraint(equalTo: imagePhoto.topAnchor),
-            likeButton.trailingAnchor.constraint(equalTo: imagePhoto.trailingAnchor),
-            likeButton.widthAnchor.constraint(equalToConstant: 50),
-            likeButton.heightAnchor.constraint(equalToConstant: 50)
+            checkImage.topAnchor.constraint(equalTo: imagePhoto.topAnchor),
+            checkImage.trailingAnchor.constraint(equalTo: imagePhoto.trailingAnchor),
+            checkImage.widthAnchor.constraint(equalToConstant: 50),
+            checkImage.heightAnchor.constraint(equalToConstant: 50)
             ])
     }
 }

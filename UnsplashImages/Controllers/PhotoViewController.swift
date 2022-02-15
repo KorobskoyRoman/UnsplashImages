@@ -19,10 +19,15 @@ class PhotoViewController: UIViewController {
     private var images = [Result]()
     private var popularImages = [Result]()
     private let searchController = UISearchController(searchResultsController: nil)
-    private var isLiked: Bool = false
-    private var savedPhotos = [UIImage]()
+    private var selectedImages = [UIImage]()
+    private var numberOfSelectedPhotos: Int {
+        return collectionView.indexPathsForSelectedItems?.count ?? 0
+    }
     
     private lazy var dataSource = createDiffableDataSource()
+    private lazy var addAction: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
+    }()
     
     enum Section: Int, CaseIterable {
         case popular, mainSection
@@ -45,6 +50,7 @@ class PhotoViewController: UIViewController {
         setupSearchBar()
         setupCollectionView()
         applySnapshot(animatingDifferences: false)
+        setupNavBar()
         
         self.networkManager.fetchPopular(completion: { searchResults in
             self.popularImages = searchResults
@@ -52,6 +58,16 @@ class PhotoViewController: UIViewController {
                 self.applySnapshot()
             }
         })
+    }
+    
+    private func updateNavButtonsState() {
+        addAction.isEnabled = numberOfSelectedPhotos > 0
+    }
+    
+    func refresh() {
+        self.selectedImages.removeAll()
+        self.collectionView.selectItem(at: nil, animated: true, scrollPosition: [])
+        updateNavButtonsState()
     }
     
 // MARK: - Setup elements
@@ -77,6 +93,35 @@ class PhotoViewController: UIViewController {
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseId)
         collectionView.register(PopularPhotoCell.self, forCellWithReuseIdentifier: PopularPhotoCell.reuseId)
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
+    }
+    
+    private func setupNavBar() {
+        navigationItem.rightBarButtonItem = addAction
+        navigationController?.hidesBarsOnTap = false
+        addAction.isEnabled = true
+    }
+    
+    @objc private func addBarButtonTapped() {
+        let selectedPhotos = collectionView.indexPathsForSelectedItems?.reduce([], { (photos, indexPath) -> [Result] in
+            var mutablePhotos = photos
+            let photo = images[indexPath.item]
+            mutablePhotos.append(photo)
+            return mutablePhotos
+        })
+        let alert = UIAlertController(title: "", message: "\(selectedPhotos!.count) фото будут добавлены в избранное", preferredStyle: .alert)
+        let add = UIAlertAction(title: "Добавить", style: .default) { action in
+            let tabbar = self.tabBarController as! MainTabBarController
+            let navVC = tabbar.viewControllers?[1] as! UINavigationController
+            let libraryVC = navVC.topViewController as! LibraryViewController
+            
+            libraryVC.photos.append(contentsOf: selectedPhotos ?? [])
+//            libraryVC.collectionView.reloadData()
+            self.refresh()
+        }
+        let cancel = UIAlertAction(title: "Отменa", style: .cancel) { action in }
+        alert.addAction(add)
+        alert.addAction(cancel)
+        present(alert, animated: true)
     }
 }
 
