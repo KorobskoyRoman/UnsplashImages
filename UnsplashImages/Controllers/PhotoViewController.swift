@@ -51,6 +51,7 @@ class PhotoViewController: UIViewController {
         setupCollectionView()
         applySnapshot(animatingDifferences: false)
         setupNavBar()
+        collectionView.delegate = self
         
         self.networkManager.fetchPopular(completion: { searchResults in
             self.popularImages = searchResults
@@ -89,6 +90,8 @@ class PhotoViewController: UIViewController {
         collectionView.backgroundColor = .white
         view.addSubview(collectionView)
         collectionView.backgroundColor = .mainWhite()
+        collectionView.allowsMultipleSelection = true
+        title = "Photos"
         
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseId)
         collectionView.register(PopularPhotoCell.self, forCellWithReuseIdentifier: PopularPhotoCell.reuseId)
@@ -233,6 +236,34 @@ extension PhotoViewController {
         snapshot.appendItems(images, toSection: .mainSection)
         snapshot.appendItems(popularImages, toSection: .popular)
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension PhotoViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        updateNavButtonsState()
+        guard let section = Section(rawValue: indexPath.section) else {
+            fatalError("No section")
+        }
+        switch section {
+        case .popular:
+            return
+        case .mainSection:
+            let cell = collectionView.cellForItem(at: indexPath) as! PhotoCell
+            guard let image = cell.imagePhoto.image else { return }
+            selectedImages.append(image)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        updateNavButtonsState()
+        let cell = collectionView.cellForItem(at: indexPath) as! PhotoCell
+        guard let image = cell.imagePhoto.image else { return }
+        if let index = selectedImages.firstIndex(of: image) {
+            selectedImages.remove(at: index)
+        }
     }
 }
 
