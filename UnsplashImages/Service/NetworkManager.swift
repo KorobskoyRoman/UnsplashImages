@@ -11,9 +11,10 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     
-    func fetchPhotos(searchText: String, completion: @escaping (ImageData) -> Void) {
+    func fetchPhotos(page: Int = 1, searchText: String, completion: @escaping (ImageData) -> Void) {
         let apiKey = "Tb2OdOBrRDkyMDye7PNozlFWSkXrCh_3DWmrU40EI2E"
-        let urlString = "https://api.unsplash.com/search/photos/?page=1&per_page=10&client_id=\(apiKey)&query=\(searchText)"
+        let page = page
+        let urlString = "https://api.unsplash.com/search/photos/?page=\(page)&per_page=10&client_id=\(apiKey)&query=\(searchText)"
         
         guard let urlString = URL(string: urlString) else { return }
         
@@ -32,9 +33,9 @@ class NetworkManager {
         task.resume()
     }
     
-    func fetchPopular(completion: @escaping ([Result]) -> Void) {
+    func fetchPopular(page: Int,completion: @escaping ([Result]) -> Void) {
         let apiKey = "Tb2OdOBrRDkyMDye7PNozlFWSkXrCh_3DWmrU40EI2E"
-        let urlString = "https://api.unsplash.com/photos?page=1&client_id=\(apiKey)"
+        let urlString = "https://api.unsplash.com/photos?page=\(page)&client_id=\(apiKey)"
         
         guard let urlString = URL(string: urlString) else { return }
         
@@ -46,7 +47,7 @@ class NetworkManager {
                 return
             }
             if let popularData = self.parseJSON(type: [Result].self, data: data) {
-                print("popular images: \(popularData)")
+//                print("popular images: \(popularData)")
                 completion(popularData)
             }
         }

@@ -23,10 +23,14 @@ class PhotoViewController: UIViewController {
     private var numberOfSelectedPhotos: Int {
         return collectionView.indexPathsForSelectedItems?.count ?? 0
     }
+    private var page: Int = 1
     
     private lazy var dataSource = createDiffableDataSource()
     private lazy var addAction: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
+    }()
+    private lazy var longPress: UILongPressGestureRecognizer = {
+        UILongPressGestureRecognizer(target: self, action: #selector(longPressTapped))
     }()
     
     enum Section: Int, CaseIterable {
@@ -53,7 +57,7 @@ class PhotoViewController: UIViewController {
         setupNavBar()
         collectionView.delegate = self
         
-        self.networkManager.fetchPopular(completion: { searchResults in
+        self.networkManager.fetchPopular(page: 1, completion: { searchResults in
             self.popularImages = searchResults
             DispatchQueue.main.async {
                 self.applySnapshot()
@@ -92,6 +96,7 @@ class PhotoViewController: UIViewController {
         collectionView.backgroundColor = .mainWhite()
         collectionView.allowsMultipleSelection = true
         title = "Photos"
+        collectionView.delegate = self
         
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseId)
         collectionView.register(PopularPhotoCell.self, forCellWithReuseIdentifier: PopularPhotoCell.reuseId)
@@ -118,13 +123,21 @@ class PhotoViewController: UIViewController {
             let libraryVC = navVC.topViewController as! LibraryViewController
             
             libraryVC.photos.append(contentsOf: selectedPhotos ?? [])
-//            libraryVC.collectionView.reloadData()
             self.refresh()
         }
         let cancel = UIAlertAction(title: "Отменa", style: .cancel) { action in }
         alert.addAction(add)
         alert.addAction(cancel)
         present(alert, animated: true)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        collectionView.frame = view.bounds
+    }
+    
+    @objc private func longPressTapped() {
+        
     }
 }
 
@@ -265,6 +278,29 @@ extension PhotoViewController: UICollectionViewDelegate {
             selectedImages.remove(at: index)
         }
     }
+    
+// MARK: Pagination
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        switch section {
+        case .popular:
+            let position = collectionView.contentOffset.x
+            if position > (collectionView.contentSize.width - 50 - collectionView.bounds.size.width) {
+                networkManager.fetchPopular(page: page) { [weak self] results in
+                    let newData = results
+                    self?.popularImages.append(contentsOf: newData)
+                    DispatchQueue.main.async {
+                        self?.applySnapshot(animatingDifferences: true)
+                    }
+                }
+                page += 1
+                print(page)
+            }
+        case .mainSection:
+            return
+        }
+    }
 }
 
 // MARK: - UISearchBarDelegate
@@ -273,7 +309,7 @@ extension PhotoViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
-            self.networkManager.fetchPhotos(searchText: searchText) { [weak self] searchResults in
+            self.networkManager.fetchPhotos(page: self.page, searchText: searchText) { [weak self] searchResults in
                 self?.images = searchResults.results
                 DispatchQueue.main.async {
                     self?.applySnapshot()
@@ -281,6 +317,9 @@ extension PhotoViewController: UISearchBarDelegate {
             }
         })
     }
+}
+
+extension PhotoViewController: UIGestureRecognizerDelegate {
 }
 
 // MARK: - SwiftUI

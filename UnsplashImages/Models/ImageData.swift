@@ -13,7 +13,10 @@ struct ImageData: Codable {
 
 struct Result: Codable, Hashable {
     
+    let uuid = UUID()
     let urls: [Urls.RawValue:String]
+    
+    private enum CodingKeys : String, CodingKey { case urls }
     
     enum Urls: String {
         case raw
@@ -24,6 +27,10 @@ struct Result: Codable, Hashable {
     }
     
     static func == (lhs: Result, rhs: Result) -> Bool {
-        lhs.urls == rhs.urls
+        lhs.uuid == rhs.uuid
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
     }
 }

@@ -20,6 +20,7 @@
 		9C9EB9C827B1D60600D4F8F3 /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB9C727B1D60600D4F8F3 /* ImageData.swift */; };
 		9C9EB9CB27B56FC100D4F8F3 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB9CA27B56FC100D4F8F3 /* SectionHeader.swift */; };
 		9CED5E6327B835AA007A61E5 /* PopularPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E6227B835AA007A61E5 /* PopularPhotoCell.swift */; };
+		9CED5E7227BD4655007A61E5 /* LibraryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7127BD4655007A61E5 /* LibraryCell.swift */; };
 		B2E2780E933A3F6E2EC70039 /* Pods_UnsplashImages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 263E2D02FC720BC07D644BEC /* Pods_UnsplashImages.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		9C9EB9C727B1D60600D4F8F3 /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		9C9EB9CA27B56FC100D4F8F3 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		9CED5E6227B835AA007A61E5 /* PopularPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularPhotoCell.swift; sourceTree = "<group>"; };
+		9CED5E7127BD4655007A61E5 /* LibraryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 			children = (
 				9C9EB9C127B19B0500D4F8F3 /* PhotoCell.swift */,
 				9CED5E6227B835AA007A61E5 /* PopularPhotoCell.swift */,
+				9CED5E7127BD4655007A61E5 /* LibraryCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				9CED5E6327B835AA007A61E5 /* PopularPhotoCell.swift in Sources */,
 				9C9EB9B827B190F000D4F8F3 /* PhotoViewController.swift in Sources */,
 				9C9EB9CB27B56FC100D4F8F3 /* SectionHeader.swift in Sources */,
+				9CED5E7227BD4655007A61E5 /* LibraryCell.swift in Sources */,
 				9C9EB9A427B18F6A00D4F8F3 /* SceneDelegate.swift in Sources */,
 				9C9EB9B627B1909000D4F8F3 /* MainTabBarController.swift in Sources */,
 			);
