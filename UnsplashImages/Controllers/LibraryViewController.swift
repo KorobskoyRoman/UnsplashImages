@@ -43,6 +43,11 @@ class LibraryViewController: UIViewController {
         applySnapshot(animatingDifferences: false)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        applySnapshot(animatingDifferences: true)
+    }
+    
     private func setupCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createCompositialLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleWidth]

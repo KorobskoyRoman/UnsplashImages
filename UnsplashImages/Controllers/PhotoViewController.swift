@@ -29,9 +29,7 @@ class PhotoViewController: UIViewController {
     private lazy var addAction: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
     }()
-    private lazy var longPress: UILongPressGestureRecognizer = {
-        UILongPressGestureRecognizer(target: self, action: #selector(longPressTapped))
-    }()
+//    private lazy var longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressTapped))
     
     enum Section: Int, CaseIterable {
         case popular, mainSection
@@ -63,6 +61,11 @@ class PhotoViewController: UIViewController {
                 self.applySnapshot()
             }
         })
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tabBarController?.tabBar.isHidden = false
     }
     
     private func updateNavButtonsState() {
@@ -101,6 +104,7 @@ class PhotoViewController: UIViewController {
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseId)
         collectionView.register(PopularPhotoCell.self, forCellWithReuseIdentifier: PopularPhotoCell.reuseId)
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
+//        collectionView.addGestureRecognizer(longPressGesture)
     }
     
     private func setupNavBar() {
@@ -136,8 +140,17 @@ class PhotoViewController: UIViewController {
         collectionView.frame = view.bounds
     }
     
-    @objc private func longPressTapped() {
-        
+    @objc private func longPressTapped(sender: UILongPressGestureRecognizer) {
+        print("long press")
+        if sender.state == .ended {
+            if let cell = sender.view as? PhotoCell, let _ = self.collectionView.indexPath(for: cell) {
+                let detailsVC = DetailsViewConroller()
+                let image = cell.photo
+                detailsVC.photo = image
+                navigationController?.pushViewController(detailsVC, animated: true)
+                tabBarController?.tabBar.isHidden = true
+            }
+        }
     }
 }
 
@@ -227,6 +240,8 @@ extension PhotoViewController {
             case .mainSection:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseId, for: indexPath) as! PhotoCell
                 cell.photo = image
+                let longTap = UILongPressGestureRecognizer(target: self, action: #selector((self.longPressTapped(sender:))))
+                cell.addGestureRecognizer(longTap)
                 return cell
             }
         }
@@ -286,7 +301,7 @@ extension PhotoViewController: UICollectionViewDelegate {
         switch section {
         case .popular:
             let position = collectionView.contentOffset.x
-            if position > (collectionView.contentSize.width - 50 - collectionView.bounds.size.width) {
+            if position > (collectionView.contentSize.width - 10 - collectionView.bounds.size.width) {
                 networkManager.fetchPopular(page: page) { [weak self] results in
                     let newData = results
                     self?.popularImages.append(contentsOf: newData)
@@ -298,6 +313,7 @@ extension PhotoViewController: UICollectionViewDelegate {
                 print(page)
             }
         case .mainSection:
+            // not done yet
             return
         }
     }
