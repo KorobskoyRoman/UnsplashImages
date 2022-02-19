@@ -29,7 +29,6 @@ class PhotoViewController: UIViewController {
     private lazy var addAction: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
     }()
-//    private lazy var longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressTapped))
     
     enum Section: Int, CaseIterable {
         case popular, mainSection
@@ -104,7 +103,6 @@ class PhotoViewController: UIViewController {
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseId)
         collectionView.register(PopularPhotoCell.self, forCellWithReuseIdentifier: PopularPhotoCell.reuseId)
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionHeader.reuseId)
-//        collectionView.addGestureRecognizer(longPressGesture)
     }
     
     private func setupNavBar() {
@@ -141,8 +139,8 @@ class PhotoViewController: UIViewController {
     }
     
     @objc private func longPressTapped(sender: UILongPressGestureRecognizer) {
-        print("long press")
-        if sender.state == .ended {
+        if sender.state == .began {
+            print("long press")
             if let cell = sender.view as? PhotoCell, let _ = self.collectionView.indexPath(for: cell) {
                 let detailsVC = DetailsViewConroller()
                 let image = cell.photo

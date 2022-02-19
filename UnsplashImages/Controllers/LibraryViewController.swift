@@ -46,6 +46,7 @@ class LibraryViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         applySnapshot(animatingDifferences: true)
+        tabBarController?.tabBar.isHidden = false
     }
     
     private func setupCollectionView() {
@@ -80,6 +81,18 @@ class LibraryViewController: UIViewController {
     @objc private func refreshButtonTapped() {
         applySnapshot(animatingDifferences: true)
         updateNavButtonsState()
+    }
+    
+    @objc private func tapPressed(sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            if let cell = sender.view as? LibraryCell, let _ = self.collectionView.indexPath(for: cell) {
+                let detailsVC = DetailsViewConroller()
+                let image = cell.photo
+                detailsVC.photo = image
+                navigationController?.pushViewController(detailsVC, animated: true)
+                tabBarController?.tabBar.isHidden = true
+            }
+        }
     }
 }
 
@@ -139,6 +152,8 @@ extension LibraryViewController {
             case .mainSection:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LibraryCell.reuseId, for: indexPath) as! LibraryCell
                 cell.photo = image
+                let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapPressed(sender:)))
+                cell.addGestureRecognizer(tap)
                 return cell
             }
         }

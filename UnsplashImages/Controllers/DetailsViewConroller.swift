@@ -14,7 +14,7 @@ class DetailsViewConroller: UIViewController {
     
     var photo: Result! {
         didSet {
-            let imageUrl = photo.urls["raw"]
+            let imageUrl = photo.urls["raw"] ?? photo.urls["regular"]
             guard let photoUrl = imageUrl, let url = URL(string: photoUrl) else { return }
             imageView.sd_setImage(with: url, completed: nil)
         }
