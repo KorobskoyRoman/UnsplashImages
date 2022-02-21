@@ -7,5 +7,6 @@ target 'UnsplashImages' do
 
   # Pods for UnsplashImages
 pod 'SDWebImage'
+pod 'RealmSwift'
 
 end

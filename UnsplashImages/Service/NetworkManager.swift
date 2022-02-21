@@ -8,9 +8,7 @@
 import Foundation
 
 class NetworkManager {
-    
-    static let shared = NetworkManager()
-    
+        
     func fetchPhotos(page: Int = 1, searchText: String, completion: @escaping (ImageData) -> Void) {
         let apiKey = "Tb2OdOBrRDkyMDye7PNozlFWSkXrCh_3DWmrU40EI2E"
         let page = page

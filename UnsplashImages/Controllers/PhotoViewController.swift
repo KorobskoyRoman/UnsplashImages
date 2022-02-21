@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import RealmSwift
 
 class PhotoViewController: UIViewController {
         
@@ -29,6 +30,10 @@ class PhotoViewController: UIViewController {
     private lazy var addAction: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
     }()
+    private lazy var shareAction: UIBarButtonItem = {
+        return UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(shareActionTapped))
+    }()
+    let realm = try! Realm()
     
     enum Section: Int, CaseIterable {
         case popular, mainSection
@@ -107,6 +112,7 @@ class PhotoViewController: UIViewController {
     
     private func setupNavBar() {
         navigationItem.rightBarButtonItem = addAction
+        navigationItem.leftBarButtonItem = shareAction
         navigationController?.hidesBarsOnTap = false
         addAction.isEnabled = true
     }
@@ -123,14 +129,35 @@ class PhotoViewController: UIViewController {
             let tabbar = self.tabBarController as! MainTabBarController
             let navVC = tabbar.viewControllers?[1] as! UINavigationController
             let libraryVC = navVC.topViewController as! LibraryViewController
-            
+
             libraryVC.photos.append(contentsOf: selectedPhotos ?? [])
             self.refresh()
+            
+            let imageModel = RealmImageModel()
+            selectedPhotos?.forEach({ image in
+                imageModel.urlImage = image.urls["regular"]!
+            })
+            RealmManager.shared.saveImageModel(photo: imageModel)
         }
+        
         let cancel = UIAlertAction(title: "Отменa", style: .cancel) { action in }
         alert.addAction(add)
         alert.addAction(cancel)
         present(alert, animated: true)
+    }
+    
+    @objc private func shareActionTapped(sender: UIBarButtonItem) {
+        let shareController = UIActivityViewController(activityItems: selectedImages, applicationActivities: nil)
+        
+        shareController.completionWithItemsHandler = { _, bool, _, _ in
+            if bool {
+                self.refresh()
+            }
+        }
+        
+        shareController.popoverPresentationController?.barButtonItem = sender
+        shareController.popoverPresentationController?.permittedArrowDirections = .any
+        present(shareController, animated: true, completion: nil)
     }
     
     override func viewDidLayoutSubviews() {
