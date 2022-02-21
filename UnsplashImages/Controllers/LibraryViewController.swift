@@ -51,14 +51,13 @@ class LibraryViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        applySnapshot(animatingDifferences: true)
         tabBarController?.tabBar.isHidden = false
         loadPhotos()
     }
     
     private func loadPhotos() {
         photos = realm.objects(RealmImageModel.self)
-        applySnapshot(animatingDifferences: true)
+        applySnapshot(animatingDifferences: false)
         print(photos ?? [])
     }
     
