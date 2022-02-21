@@ -10,11 +10,15 @@ import RealmSwift
 
 class LibraryViewController: UIViewController {
     
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, Result>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Result>
+//    typealias DataSource = UICollectionViewDiffableDataSource<Section, Result>
+//    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Result>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, RealmImageModel>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, RealmImageModel>
     
     var collectionView: UICollectionView!
-    var photos = [Result]()
+//    var photos = [Result]()
+    var photos: Results<RealmImageModel>!
+    private let realm = try! Realm()
     private lazy var deleteAction: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteBarButtonTapped))
     }()
@@ -42,12 +46,20 @@ class LibraryViewController: UIViewController {
         
         setupNavBar()
         applySnapshot(animatingDifferences: false)
+        loadPhotos()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         applySnapshot(animatingDifferences: true)
         tabBarController?.tabBar.isHidden = false
+        loadPhotos()
+    }
+    
+    private func loadPhotos() {
+        photos = realm.objects(RealmImageModel.self)
+        applySnapshot(animatingDifferences: true)
+        print(photos ?? [])
     }
     
     private func setupCollectionView() {
@@ -74,7 +86,7 @@ class LibraryViewController: UIViewController {
     }
     
     @objc private func deleteBarButtonTapped() {
-        photos.removeAll()
+//        photos.removeAll()
         updateNavButtonsState()
         applySnapshot(animatingDifferences: true)
     }
@@ -89,7 +101,7 @@ class LibraryViewController: UIViewController {
             if let cell = sender.view as? LibraryCell, let _ = self.collectionView.indexPath(for: cell) {
                 let detailsVC = DetailsViewConroller()
                 let image = cell.photo
-                detailsVC.photo = image
+//                detailsVC.photo = image
                 navigationController?.pushViewController(detailsVC, animated: true)
                 tabBarController?.tabBar.isHidden = true
             }
@@ -153,6 +165,7 @@ extension LibraryViewController {
             case .mainSection:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LibraryCell.reuseId, for: indexPath) as! LibraryCell
                 cell.photo = image
+//                cell.photo.urlImage = image.urlImage
                 let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapPressed(sender:)))
                 cell.addGestureRecognizer(tap)
                 return cell
@@ -173,7 +186,7 @@ extension LibraryViewController {
         var snapshot = Snapshot()
         
         snapshot.appendSections([.mainSection])
-        snapshot.appendItems(photos, toSection: .mainSection)
+        snapshot.appendItems(photos?.toArray() ?? [], toSection: .mainSection)
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 }

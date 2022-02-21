@@ -13,10 +13,17 @@ class LibraryCell: UICollectionViewCell {
     let imageView = UIImageView()
     let containterView = UIView()
     
-    var photo: Result! {
+//    var photo: Result! {
+//        didSet {
+//            let imageUrl = photo.urls["regular"]
+//            guard let photoUrl = imageUrl, let url = URL(string: photoUrl) else { return }
+//            imageView.sd_setImage(with: url, completed: nil)
+//        }
+//    }
+    var photo: RealmImageModel! {
         didSet {
-            let imageUrl = photo.urls["regular"]
-            guard let photoUrl = imageUrl, let url = URL(string: photoUrl) else { return }
+            let imageUrl = photo.urlImage
+            let url = URL(string: imageUrl)
             imageView.sd_setImage(with: url, completed: nil)
         }
     }
