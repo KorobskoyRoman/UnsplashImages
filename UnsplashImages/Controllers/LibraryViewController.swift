@@ -87,6 +87,7 @@ class LibraryViewController: UIViewController {
     
     @objc private func deleteBarButtonTapped() {
 //        photos.removeAll()
+/// -------------------------------------------------------------------------------------ДОБАВИТЬ УДАЛЕНИЕ ОБЪЕКТОВ -------------------------------------------------------------------------------------
         updateNavButtonsState()
         applySnapshot(animatingDifferences: true)
     }
@@ -101,7 +102,7 @@ class LibraryViewController: UIViewController {
             if let cell = sender.view as? LibraryCell, let _ = self.collectionView.indexPath(for: cell) {
                 let detailsVC = DetailsViewConroller()
                 let image = cell.photo
-//                detailsVC.photo = image
+                detailsVC.photoFromLibrary = image
                 navigationController?.pushViewController(detailsVC, animated: true)
                 tabBarController?.tabBar.isHidden = true
             }

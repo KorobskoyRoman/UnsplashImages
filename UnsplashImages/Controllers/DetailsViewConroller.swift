@@ -20,6 +20,14 @@ class DetailsViewConroller: UIViewController {
         }
     }
     
+    var photoFromLibrary: RealmImageModel! {
+        didSet {
+            let imageUrl = photoFromLibrary.urlImage
+            let url = URL(string: imageUrl)
+            imageView.sd_setImage(with: url, completed: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
