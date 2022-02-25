@@ -177,6 +177,19 @@ class PhotoViewController: UIViewController {
             }
         }
     }
+    
+    @objc private func tapPressTapped(sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            print("popular pressed")
+            if let cell = sender.view as? PopularPhotoCell, let _ = self.collectionView.indexPath(for: cell) {
+                let detailsVC = DetailsViewConroller()
+                let image = cell.photo
+                detailsVC.photo = image
+                navigationController?.pushViewController(detailsVC, animated: true)
+                tabBarController?.tabBar.isHidden = true
+            }
+        }
+    }
 }
 
 // MARK: - Create layout
@@ -261,6 +274,8 @@ extension PhotoViewController {
             case .popular:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PopularPhotoCell.reuseId, for: indexPath) as! PopularPhotoCell
                 cell.photo = image
+                let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapPressTapped(sender:)))
+                cell.addGestureRecognizer(tap)
                 return cell
             case .mainSection:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseId, for: indexPath) as! PhotoCell
@@ -326,7 +341,7 @@ extension PhotoViewController: UICollectionViewDelegate {
         switch section {
         case .popular:
             let position = collectionView.contentOffset.x
-            if position > (collectionView.contentSize.width - 10 - collectionView.bounds.size.width) {
+            if position > (collectionView.contentSize.width - 1 - collectionView.bounds.size.width) {
                 networkManager.fetchPopular(page: page) { [weak self] results in
                     let newData = results
                     self?.popularImages.append(contentsOf: newData)
@@ -350,10 +365,12 @@ extension PhotoViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.timer?.invalidate()
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
+            self.collectionView.showLoading(style: .large, color: .cyan)
             self.networkManager.fetchPhotos(page: self.page, searchText: searchText) { [weak self] searchResults in
                 self?.images = searchResults.results
                 DispatchQueue.main.async {
                     self?.applySnapshot()
+                    self?.collectionView.stopLoading()
                 }
             }
         })

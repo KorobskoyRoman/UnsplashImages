@@ -20,7 +20,6 @@ class PhotoCell: UICollectionViewCell {
         imageView.alpha = 0
         return imageView
     }()
-    private var isLiked: Bool = false
     
     var photo: Result! {
         didSet {

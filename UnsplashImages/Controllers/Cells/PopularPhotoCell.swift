@@ -53,7 +53,7 @@ class PopularPhotoCell: UICollectionViewCell {
     private func setConstraints() {
         containterView.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .systemRed
+//        imageView.backgroundColor = .systemCyan
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         

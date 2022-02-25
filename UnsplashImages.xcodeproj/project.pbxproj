@@ -24,6 +24,8 @@
 		9CED5E7427BE9A76007A61E5 /* DetailsViewConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7327BE9A76007A61E5 /* DetailsViewConroller.swift */; };
 		9CED5E7927C3CA4A007A61E5 /* RealmImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7827C3CA4A007A61E5 /* RealmImageModel.swift */; };
 		9CED5E7B27C3CAB7007A61E5 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7A27C3CAB7007A61E5 /* RealmManager.swift */; };
+		9CED5E7D27C923A3007A61E5 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7C27C923A3007A61E5 /* GradientView.swift */; };
+		9CED5E7F27C9255D007A61E5 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7E27C9255D007A61E5 /* UIView + Extension.swift */; };
 		B2E2780E933A3F6E2EC70039 /* Pods_UnsplashImages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 263E2D02FC720BC07D644BEC /* Pods_UnsplashImages.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		9CED5E7327BE9A76007A61E5 /* DetailsViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewConroller.swift; sourceTree = "<group>"; };
 		9CED5E7827C3CA4A007A61E5 /* RealmImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmImageModel.swift; sourceTree = "<group>"; };
 		9CED5E7A27C3CAB7007A61E5 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		9CED5E7C27C923A3007A61E5 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		9CED5E7E27C9255D007A61E5 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,8 @@
 			children = (
 				9C9EB9BF27B1965400D4F8F3 /* UIColor + Extension.swift */,
 				9C9EB9CA27B56FC100D4F8F3 /* SectionHeader.swift */,
+				9CED5E7C27C923A3007A61E5 /* GradientView.swift */,
+				9CED5E7E27C9255D007A61E5 /* UIView + Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -292,7 +298,9 @@
 				9C9EB9C027B1965500D4F8F3 /* UIColor + Extension.swift in Sources */,
 				9C9EB9A227B18F6A00D4F8F3 /* AppDelegate.swift in Sources */,
 				9C9EB9BA27B1930700D4F8F3 /* LibraryViewController.swift in Sources */,
+				9CED5E7D27C923A3007A61E5 /* GradientView.swift in Sources */,
 				9C9EB9C227B19B0500D4F8F3 /* PhotoCell.swift in Sources */,
+				9CED5E7F27C9255D007A61E5 /* UIView + Extension.swift in Sources */,
 				9C9EB9C827B1D60600D4F8F3 /* ImageData.swift in Sources */,
 				9CED5E6327B835AA007A61E5 /* PopularPhotoCell.swift in Sources */,
 				9C9EB9B827B190F000D4F8F3 /* PhotoViewController.swift in Sources */,
