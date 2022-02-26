@@ -101,6 +101,6 @@ class PhotoCell: UICollectionViewCell {
             checkImage.trailingAnchor.constraint(equalTo: imagePhoto.trailingAnchor),
             checkImage.widthAnchor.constraint(equalToConstant: 50),
             checkImage.heightAnchor.constraint(equalToConstant: 50)
-            ])
+        ])
     }
 }

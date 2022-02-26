@@ -26,6 +26,7 @@
 		9CED5E7B27C3CAB7007A61E5 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7A27C3CAB7007A61E5 /* RealmManager.swift */; };
 		9CED5E7D27C923A3007A61E5 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7C27C923A3007A61E5 /* GradientView.swift */; };
 		9CED5E7F27C9255D007A61E5 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E7E27C9255D007A61E5 /* UIView + Extension.swift */; };
+		9CED5E8127CAD7CB007A61E5 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED5E8027CAD7CB007A61E5 /* Alert.swift */; };
 		B2E2780E933A3F6E2EC70039 /* Pods_UnsplashImages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 263E2D02FC720BC07D644BEC /* Pods_UnsplashImages.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		9CED5E7A27C3CAB7007A61E5 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		9CED5E7C27C923A3007A61E5 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		9CED5E7E27C9255D007A61E5 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
+		9CED5E8027CAD7CB007A61E5 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				9C9EB9CA27B56FC100D4F8F3 /* SectionHeader.swift */,
 				9CED5E7C27C923A3007A61E5 /* GradientView.swift */,
 				9CED5E7E27C9255D007A61E5 /* UIView + Extension.swift */,
+				9CED5E8027CAD7CB007A61E5 /* Alert.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CED5E8127CAD7CB007A61E5 /* Alert.swift in Sources */,
 				9CED5E7427BE9A76007A61E5 /* DetailsViewConroller.swift in Sources */,
 				9C9EB9C627B1D40A00D4F8F3 /* NetworkManager.swift in Sources */,
 				9CED5E7B27C3CAB7007A61E5 /* RealmManager.swift in Sources */,

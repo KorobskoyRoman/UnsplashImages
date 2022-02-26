@@ -34,6 +34,8 @@ class PhotoViewController: UIViewController {
         return UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(shareActionTapped))
     }()
     let realm = try! Realm()
+    let customAlert = Alert()
+    private lazy var helpButton = UIButton(type: .infoLight)
     
     enum Section: Int, CaseIterable {
         case popular, mainSection
@@ -58,6 +60,7 @@ class PhotoViewController: UIViewController {
         applySnapshot(animatingDifferences: false)
         setupNavBar()
         collectionView.delegate = self
+        addAction.isEnabled = false
         
         self.networkManager.fetchPopular(page: 1, completion: { searchResults in
             self.popularImages = searchResults
@@ -112,9 +115,14 @@ class PhotoViewController: UIViewController {
     
     private func setupNavBar() {
         navigationItem.rightBarButtonItem = addAction
-        navigationItem.leftBarButtonItem = shareAction
+//        navigationItem.leftBarButtonItem = shareAction
         navigationController?.hidesBarsOnTap = false
         addAction.isEnabled = true
+        helpButton.applyGradients(cornerRadius: 22)
+        helpButton.tintColor = .mainWhite()
+        helpButton.addTarget(self, action: #selector(helpButtonPressed), for: .touchUpInside)
+        let helpButton = UIBarButtonItem(customView: helpButton)
+        navigationItem.leftBarButtonItems = [shareAction, helpButton]
     }
     
     @objc private func addBarButtonTapped() {
@@ -190,6 +198,9 @@ class PhotoViewController: UIViewController {
             }
         }
     }
+    
+    @objc private func helpButtonPressed(sender: UIBarButtonItem) {
+        customAlert.showAlert(title: "Tip!", message: "To choose image to save you can long press on image you like. \n To add image in library you can just tap on it! \n Enjoy!", viewController: self)    }
 }
 
 // MARK: - Create layout
