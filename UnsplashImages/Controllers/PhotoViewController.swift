@@ -30,9 +30,7 @@ class PhotoViewController: UIViewController {
     private lazy var addAction: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
     }()
-    private lazy var shareAction: UIBarButtonItem = {
-        return UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(shareActionTapped))
-    }()
+    private lazy var shareAction = UIButton(type: .contactAdd)
     let realm = try! Realm()
     let customAlert = Alert()
     private lazy var helpButton = UIButton(type: .infoLight)
@@ -122,6 +120,10 @@ class PhotoViewController: UIViewController {
         helpButton.tintColor = .mainWhite()
         helpButton.addTarget(self, action: #selector(helpButtonPressed), for: .touchUpInside)
         let helpButton = UIBarButtonItem(customView: helpButton)
+        shareAction.applyGradients(cornerRadius: 22)
+        shareAction.tintColor = .mainWhite()
+        shareAction.addTarget(self, action: #selector(shareActionTapped(sender:)), for: .touchUpInside)
+        let shareAction = UIBarButtonItem(customView: shareAction)
         navigationItem.leftBarButtonItems = [shareAction, helpButton]
     }
     
