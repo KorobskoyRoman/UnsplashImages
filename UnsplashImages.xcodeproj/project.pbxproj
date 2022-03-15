@@ -34,6 +34,7 @@
 		11A9B940392693F7EF7B3EC9 /* Pods-UnsplashImages.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnsplashImages.debug.xcconfig"; path = "Target Support Files/Pods-UnsplashImages/Pods-UnsplashImages.debug.xcconfig"; sourceTree = "<group>"; };
 		263E2D02FC720BC07D644BEC /* Pods_UnsplashImages.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UnsplashImages.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		762361386D586BC09CCD460C /* Pods-UnsplashImages.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnsplashImages.release.xcconfig"; path = "Target Support Files/Pods-UnsplashImages/Pods-UnsplashImages.release.xcconfig"; sourceTree = "<group>"; };
+		9C773A8827E14CF000B6B589 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		9C9EB99E27B18F6A00D4F8F3 /* UnsplashImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UnsplashImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9EB9A127B18F6A00D4F8F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C9EB9A327B18F6A00D4F8F3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +82,7 @@
 		9C9EB99527B18F6A00D4F8F3 = {
 			isa = PBXGroup;
 			children = (
+				9C773A8827E14CF000B6B589 /* Readme.md */,
 				9C9EB9A027B18F6A00D4F8F3 /* UnsplashImages */,
 				9C9EB99F27B18F6A00D4F8F3 /* Products */,
 				E45B8AC179CEF401A6C072CD /* Pods */,
