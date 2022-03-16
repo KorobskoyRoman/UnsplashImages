@@ -140,7 +140,6 @@ class PhotoViewController: UIViewController {
             let navVC = tabbar.viewControllers?[1] as! UINavigationController
             let libraryVC = navVC.topViewController as! LibraryViewController
 
-//            libraryVC.photos.append(contentsOf: selectedPhotos ?? [])
             self.refresh()
             
             let imageModel = RealmImageModel()
