@@ -23,12 +23,20 @@ class RealmManager {
             print(error)
         }
     }
+    
+    func deleteModel(photo: RealmImageModel) {
+        do {
+            try localRealm.write({
+                localRealm.deleteAll()
+            })
+        } catch {
+            print(error)
+        }
+    }
 }
 
 extension Results {
   func toArray() -> [Element] {
-    return compactMap {
-        $0
-    }
+    return compactMap { $0 }
   }
 }

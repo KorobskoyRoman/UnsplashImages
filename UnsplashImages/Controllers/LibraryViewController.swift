@@ -10,13 +10,10 @@ import RealmSwift
 
 class LibraryViewController: UIViewController {
     
-//    typealias DataSource = UICollectionViewDiffableDataSource<Section, Result>
-//    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Result>
     typealias DataSource = UICollectionViewDiffableDataSource<Section, RealmImageModel>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, RealmImageModel>
     
     var collectionView: UICollectionView!
-//    var photos = [Result]()
     var photos: Results<RealmImageModel>!
     private let realm = try! Realm()
     private lazy var deleteAction: UIBarButtonItem = {
@@ -85,8 +82,8 @@ class LibraryViewController: UIViewController {
     }
     
     @objc private func deleteBarButtonTapped() {
-//        photos.removeAll()
-/// -------------------------------------------------------------------------------------ДОБАВИТЬ УДАЛЕНИЕ ОБЪЕКТОВ -------------------------------------------------------------------------------------
+        let imageModel = RealmImageModel()
+        RealmManager.shared.deleteModel(photo: imageModel)
         updateNavButtonsState()
         applySnapshot(animatingDifferences: true)
     }

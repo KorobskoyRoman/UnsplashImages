@@ -113,7 +113,6 @@ class PhotoViewController: UIViewController {
     
     private func setupNavBar() {
         navigationItem.rightBarButtonItem = addAction
-//        navigationItem.leftBarButtonItem = shareAction
         navigationController?.hidesBarsOnTap = false
         addAction.isEnabled = true
         helpButton.applyGradients(cornerRadius: 22)
@@ -136,9 +135,6 @@ class PhotoViewController: UIViewController {
         })
         let alert = UIAlertController(title: "", message: "\(selectedPhotos!.count) фото будут добавлены в избранное", preferredStyle: .alert)
         let add = UIAlertAction(title: "Добавить", style: .default) { action in
-            let tabbar = self.tabBarController as! MainTabBarController
-            let navVC = tabbar.viewControllers?[1] as! UINavigationController
-            let libraryVC = navVC.topViewController as! LibraryViewController
 
             self.refresh()
             
