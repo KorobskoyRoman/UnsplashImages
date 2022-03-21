@@ -1,5 +1,5 @@
 #  Приложение для поиска и хранения картинок.
-## Реализовано с помощью Unsplash API (https://unsplash.com/documentation)
+## Реализовано с помощью Unsplash [API](https://unsplash.com/documentation)
 ## Основной стэк технологий
 + Только UIKit
 + Весь интерфейс приложения сделан через Auto Layout. 
